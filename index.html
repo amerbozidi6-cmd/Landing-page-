@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منشئ صفحات الهبوط بالذكاء الاصطناعي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7fb;--sf:#fff;--tx:#17192b;--mu:#6b7090;--bd:#e3e6f0;--pr:#5b4bff;--ok:#12a150;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1020;--sf:#171a2e;--tx:#eef0ff;--mu:#9aa0c4;--bd:#2a2e4a}}
+:root[data-theme=dark]{--bg:#0e1020;--sf:#171a2e;--tx:#eef0ff;--mu:#9aa0c4;--bd:#2a2e4a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 Cairo,system-ui,sans-serif}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:var(--sf);border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header h1{font-size:16px;margin:0 0 0 auto;font-weight:800}
+button,select,input,textarea{font:inherit;color:var(--tx)}
+.b{border:1px solid var(--bd);background:var(--sf);padding:6px 12px;border-radius:10px;cursor:pointer}.b:hover{border-color:var(--pr)}
+.b.p{background:var(--pr);color:#fff;border-color:var(--pr)}.b.on{border-color:var(--pr);color:var(--pr)}.b:disabled{opacity:.5}
+main{max-width:1200px;margin:0 auto;padding:16px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:14px}
+.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+label{display:block;font-size:13px;color:var(--mu);margin-bottom:3px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+input[type=color]{padding:2px;height:38px}textarea{min-height:64px;resize:vertical}
+h2{font-size:15px;margin:0 0 12px}.mu{color:var(--mu);font-size:13px}
+.th{display:flex;gap:8px;flex-wrap:wrap}.th img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--bd)}
+.ed{display:grid;grid-template-columns:300px 1fr;gap:14px}@media(max-width:820px){.ed{grid-template-columns:1fr}}
+.fr{display:flex;justify-content:center;background:var(--bd);border-radius:14px;padding:8px;min-height:500px}
+iframe{border:0;background:#fff;border-radius:10px;height:78vh;width:100%;max-width:100%;transition:width .2s}
+.row{display:flex;gap:6px;align-items:center;margin-bottom:6px}.row span{flex:1}
+.tag{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bd)}.tag.pub{background:#d6f5e3;color:#0b6b36}
+.msg{padding:8px 12px;border-radius:10px;background:var(--bd);margin-bottom:10px;font-size:13px}
+.hid{display:none!important}
+</style>
+</head>
+<body>
+<header id="hd"><h1>🚀 منشئ صفحات الهبوط</h1>
+<button class="b on" data-v="new">إنشاء</button><button class="b" data-v="edit">المحرر</button><button class="b" data-v="pages">صفحاتي</button><button class="b" data-v="orders">الطلبات</button></header>
+<main>
+<div id="note" class="msg hid"></div>
+<section id="v-new">
+<div class="card"><h2>1. معلومات المنتج</h2><div class="g">
+<div><label>صور المنتج (حتى 4)</label><input type="file" id="img" accept="image/*" multiple></div>
+<div><label>اسم المنتج *</label><input id="name"></div>
+<div><label>السعر *</label><input id="price" type="number" min="0"></div>
+<div><label>السعر قبل التخفيض</label><input id="old" type="number" min="0"></div>
+<div><label>العلامة التجارية</label><input id="brand"></div>
+<div><label>العملة</label><select id="cur"><option>DZD</option><option>MAD</option><option>TND</option><option>EUR</option><option>USD</option><option>SAR</option></select></div>
+<div><label>رقم واتساب / هاتف</label><input id="wa" inputmode="tel" placeholder="0550123456"></div>
+<div><label>اللون الأساسي</label><input id="c1" type="color" value="#5b4bff"></div>
+<div><label>اللون الثانوي</label><input id="c2" type="color" value="#ff8a3d"></div>
+<div><label>لغة الصفحة</label><select id="lang"><option value="ar">العربية</option><option value="dz">العربية الجزائرية (دارجة)</option><option value="fr">Français</option><option value="en">English</option></select></div>
+</div><div id="th" class="th" style="margin-top:10px"></div></div>
+<div class="card"><details><summary>إعدادات إضافية (اختيارية)</summary><div class="g" style="margin-top:12px">
+<div><label>وصف مختصر</label><textarea id="desc"></textarea></div>
+<div><label>أهم المميزات (سطر لكل ميزة)</label><textarea id="features"></textarea></div>
+<div><label>مشاكل يحلها المنتج</label><textarea id="problems"></textarea></div>
+<div><label>الفئة المستهدفة</label><input id="audience"></div>
+<div><label>الضمان والاستبدال</label><input id="warranty"></div>
+<div><label>التوصيل (التكلفة والمدة)</label><input id="delivery"></div>
+<div><label>الألوان/المقاسات المتاحة (بفاصلة)</label><input id="options"></div>
+<div><label>آراء عملاء حقيقية (سطر: الاسم - الرأي)</label><textarea id="reviews"></textarea></div>
+<div><label>القالب</label><select id="tpl"><option value="">تلقائي (الذكاء الاصطناعي)</option></select></div>
+</div></details></div>
+<button class="b p" id="gen" style="font-size:16px;padding:12px 22px">✨ أنشئ صفحة الهبوط الخاصة بي</button>
+</section>
+
+<section id="v-edit" class="hid">
+<div class="ed"><aside class="card" id="panel"></aside>
+<div><div class="row"><button class="b" id="un">↶ تراجع</button><button class="b" id="re">↷ إعادة</button><span></span>
+<button class="b on" data-d="375">📱</button><button class="b" data-d="768">📟</button><button class="b" data-d="100%">🖥️</button></div>
+<div class="fr"><iframe id="pv" sandbox="allow-scripts"></iframe></div></div></div>
+</section>
+<section id="v-pages" class="hid"><div id="pg" class="g"></div></section>
+<section id="v-orders" class="hid"><div id="od"></div></section>
+</main>
+<script src="shim.js"></script>
+<script>
+const $=id=>document.getElementById(id),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const U=async n=>{try{return await window.claude.use(n)}catch{return null}};
+const TPL={lux:{n:'فاخر',bg:'#101014',fg:'#f5f1e8',cd:'#1c1c22',r:'4px'},modern:{n:'عصري',bg:'#0c1322',fg:'#eaf0ff',cd:'#141e35',r:'16px'},soft:{n:'بسيط وأنيق',bg:'#fffaf7',fg:'#2b2b2b',cd:'#ffffff',r:'24px'},sport:{n:'حيوي',bg:'#ffffff',fg:'#111111',cd:'#f1f1f1',r:'8px'},direct:{n:'تجاري مباشر',bg:'#fffbe6',fg:'#1a1a1a',cd:'#ffffff',r:'10px'},local:{n:'محلي',bg:'#fbf4e6',fg:'#3a2a1a',cd:'#fffdf7',r:'14px'}};
+const SEC={hero:'الواجهة',problem:'المشكلة والحل',features:'المميزات',gallery:'المعرض',why:'لماذا نحن',reviews:'آراء العملاء',faq:'الأسئلة الشائعة',order:'نموذج الطلب',cta:'الدعوة النهائية'};
+let S=null,hist=[],hi=-1,db=null,sample=null,dl=null,blob0=null,ht=null;
+const lum=h=>{const n=parseInt(h.slice(1),16),f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)};
+const ink=h=>lum(h)>.45?'#111':'#fff';
+Object.keys(TPL).forEach(k=>$('tpl').add(new Option(TPL[k].n,k)));
+function note(t){const n=$('note');n.textContent=t;n.classList.remove('hid');clearTimeout(note.t);note.t=setTimeout(()=>n.classList.add('hid'),6000)}
+
+/* ===== landing renderer ===== */
+function L(s,edit,exp){
+const t=TPL[s.tpl]||TPL.modern,cp=s.copy,rtl=s.lang==='fr'||s.lang==='en'?'ltr':'rtl',T=s.lang==='fr'?{o:'Commander',n:'Nom complet',p:'Téléphone',w:'Wilaya',c:'Commune / adresse',q:'Quantité',ok:'Commande reçue !',bad:'Vérifiez vos informations',f:'FAQ',r:'Avis clients',wh:'Pourquoi nous ?',op:'Option'}:s.lang==='en'?{o:'Order now',n:'Full name',p:'Phone',w:'State',c:'City / address',q:'Quantity',ok:'Order received!',bad:'Please check your details',f:'FAQ',r:'Reviews',wh:'Why choose us?',op:'Option'}:{o:'اطلب الآن',n:'الاسم الكامل',p:'رقم الهاتف',w:'الولاية',c:'البلدية / العنوان',q:'الكمية',ok:'تم استلام طلبك بنجاح! سنتصل بك قريبًا.',bad:'تحقق من البيانات المدخلة',f:'الأسئلة الشائعة',r:'آراء العملاء',wh:'لماذا تختارنا؟',op:'الخيار'};
+const E=(k,v,tag='span')=>`<${tag} data-k="${k}"${edit?' contenteditable="true"':''}>${esc(v)}</${tag}>`;
+const P=v=>esc(v)+' '+esc(s.cur),pct=+s.old>+s.price?Math.round((1-s.price/s.old)*100):0;
+const price=`<div class=pr><b>${P(s.price)}</b>${pct?`<s>${P(s.old)}</s><i>-${pct}%</i>`:''}</div>`;
+const btn=`<button type=button class=btn onclick="location.hash='order'">${esc(cp.cta||T.o)}</button>`;
+const im=s.imgs||[],ic=['✨','⚡','🛡️','💎','🎯','🌿'];
+const rv=(s.reviews||'').split('\n').map(x=>x.trim()).filter(Boolean);
+const X={
+hero:`<section class=hero><div class=w><div class=hc><small>${E('brand',s.brand)}</small><h1>${E('copy.headline',cp.headline)}</h1><p>${E('copy.sub',cp.sub)}</p>${price}${btn}</div>${im[0]?`<div class=hi><img src="${im[0]}" alt="${esc(s.name)}"></div>`:''}</div></section>`,
+problem:`<section><div class=w><div class=two><div class=cd><h3>😟</h3>${E('copy.problem',cp.problem,'p')}</div><div class=cd><h3>✅</h3>${E('copy.solution',cp.solution,'p')}</div></div></div></section>`,
+features:`<section><div class=w><div class=gr>${(cp.feats||[]).map((f,i)=>`<div class=cd><div class=ic>${ic[i%6]}</div>${E(`copy.feats.${i}.t`,f.t,'h3')}${E(`copy.feats.${i}.d`,f.d,'p')}</div>`).join('')}</div></div></section>`,
+gallery:im.length>1?`<section><div class=w><div class=gr>${im.slice(1).map(x=>`<img class=gi src="${x}" alt="">`).join('')}</div></div></section>`:'',
+why:`<section><div class=w><h2>${T.wh}</h2><div class=gr>${(cp.why||[]).map((x,i)=>`<div class=cd>✔ ${E(`copy.why.${i}`,x)}</div>`).join('')}${s.warranty?`<div class=cd>🛡️ ${esc(s.warranty)}</div>`:''}${s.delivery?`<div class=cd>🚚 ${esc(s.delivery)}</div>`:''}</div></div></section>`,
+reviews:rv.length?`<section><div class=w><h2>${T.r}</h2><div class=gr>${rv.map(x=>`<div class=cd>“${esc(x)}”</div>`).join('')}</div></div></section>`:'',
+faq:`<section><div class=w><h2>${T.f}</h2>${(cp.faq||[]).map((f,i)=>`<details class=cd open><summary>${E(`copy.faq.${i}.q`,f.q)}</summary>${E(`copy.faq.${i}.a`,f.a,'p')}</details>`).join('')}</div></section>`,
+order:`<section id=order><div class="w nar"><div class=cd><h2>${esc(s.name)} — ${P(s.price)}</h2><form id=of novalidate><input name=name placeholder="${T.n}"><input name=phone inputmode=tel placeholder="${T.p}"><input name=wilaya placeholder="${T.w}"><input name=commune placeholder="${T.c}">${s.options?`<select name=option>${s.options.split(/[,،]/).map(o=>`<option>${esc(o.trim())}</option>`).join('')}</select>`:''}<input name=qty type=number min=1 value=1 placeholder="${T.q}"><button class=btn>${esc(cp.cta||T.o)}</button><p id=fm></p></form></div></div></section>`,
+cta:`<section class=fin><div class=w><h2>${esc(s.name)}</h2>${price}${btn}</div></section>`};
+const body=(s.order||[]).filter(k=>!(s.hidden||[]).includes(k)).map(k=>X[k]||'').join('');
+const wa=(s.wa||'').replace(/\D/g,'').replace(/^0/,'213');
+return `<!DOCTYPE html><html lang="${s.lang==='fr'?'fr':s.lang==='en'?'en':'ar'}" dir="${rtl}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(s.name)}</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet"><style>
+:root{--c1:${s.c1};--c2:${s.c2};--bg:${t.bg};--fg:${t.fg};--cd:${t.cd};--r:${t.r};--bt:${ink(s.c1)}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 Cairo,system-ui,sans-serif}
+.w{max-width:1000px;margin:auto;padding:0 18px}.nar{max-width:520px}section{padding:38px 0}h1{font-size:clamp(26px,5vw,44px);line-height:1.25;margin:.2em 0}h2{font-size:26px;text-align:center}
+.hero{background:linear-gradient(135deg,color-mix(in srgb,var(--c2) 30%,transparent),transparent 60%)}.hero .w{display:flex;gap:26px;align-items:center;flex-wrap:wrap}.hc{flex:1 1 320px}.hi{flex:1 1 300px}.hi img{width:100%;border-radius:var(--r);box-shadow:0 14px 40px #0004}
+small{color:var(--c1);font-weight:800;letter-spacing:.5px}.pr{margin:12px 0;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}.pr b{font-size:30px;color:var(--c1)}.pr s{opacity:.6}.pr i{background:var(--c2);color:${ink(s.c2)};font-style:normal;padding:1px 10px;border-radius:99px;font-weight:800}
+.btn{background:var(--c1);color:var(--bt);border:0;padding:14px 30px;border-radius:var(--r);font:800 18px Cairo,sans-serif;cursor:pointer;box-shadow:0 6px 18px color-mix(in srgb,var(--c1) 40%,transparent)}
+.cd{background:var(--cd);border-radius:var(--r);padding:18px;border:1px solid #8883}.two,.gr{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.cd h3{margin:.2em 0}.ic{font-size:28px}.gi{width:100%;border-radius:var(--r)}
+details{margin-bottom:10px}summary{font-weight:800;cursor:pointer}form{display:grid;gap:10px}form input,form select{padding:12px;border-radius:var(--r);border:1px solid #8886;font:inherit;background:var(--bg);color:var(--fg)}
+.fin{text-align:center;background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 25%,transparent),color-mix(in srgb,var(--c2) 25%,transparent))}.fin .pr{justify-content:center}
+#fm{margin:0;text-align:center;font-weight:800}.wf{position:fixed;bottom:16px;inset-inline-start:16px;background:#25d366;color:#fff;border-radius:99px;padding:10px 16px;text-decoration:none;font-weight:800}
+[contenteditable]:hover{outline:2px dashed var(--c1);outline-offset:2px}
+</style></head><body>${body}<footer style="text-align:center;padding:20px;opacity:.6">© ${esc(s.brand||s.name)}</footer>${wa?`<a class=wf href="https://wa.me/${wa}" target=_blank>WhatsApp</a>`:''}
+<script>
+const ED=${edit?1:0},EXP=${exp?1:0},WA="${wa}",OK=${JSON.stringify(T.ok)},BAD=${JSON.stringify(T.bad)};
+if(ED)addEventListener('input',e=>{const k=e.target.closest&&e.target.closest('[data-k]');k&&parent.postMessage({t:'ed',k:k.dataset.k,v:k.innerText},'*')});
+const f=document.getElementById('of'),m=document.getElementById('fm');
+addEventListener('message',e=>{if(e.data&&e.data.t==='res'){m.style.color=e.data.ok?'#12a150':'#d33';m.textContent=e.data.ok?OK:(e.data.msg||BAD);if(e.data.ok)f.reset()}});
+if(f)f.onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));
+if(ED){m.textContent='معاينة — لا يتم إرسال الطلب';return}
+const ph=(d.phone||'').replace(/[\\s.-]/g,'');
+if((d.name||'').trim().length<3||!/^(\\+|00)?\\d{8,14}$/.test(ph)||!(d.wilaya||'').trim()||!(+d.qty>0)){m.style.color='#d33';m.textContent=BAD;return}
+if(EXP){if(!WA){m.textContent='—';return}const tx=encodeURIComponent(Object.values(d).join(' | '));location.href='https://wa.me/'+WA+'?text='+tx;return}
+parent.postMessage({t:'order',d},'*')};
+<\/script></body></html>`}
+
+/* ===== state helpers ===== */
+const gp=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
+function sp(o,p,v){const a=p.split('.'),l=a.pop();a.reduce((x,k)=>x[k],o)[l]=v}
+function snap(now){clearTimeout(ht);const go=()=>{const j=JSON.stringify(S);if(hist[hi]===j)return;hist=hist.slice(0,hi+1);hist.push(j);hi=hist.length-1;S.updated=Date.now();save()};now?go():ht=setTimeout(go,700)}
+let st=null;async function save(){clearTimeout(st);st=setTimeout(async()=>{if(!db||!S)return;try{await db.doc('pages/'+S.id).set(JSON.parse(JSON.stringify(S)))}catch(e){note('تعذّر الحفظ: '+(e.message||e.code))}},1200)}
+function draw(){$('pv').srcdoc=L(S,true,false)}
+function show(v){['new','edit','pages','orders'].forEach(x=>$('v-'+x).classList.toggle('hid',x!==v));document.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='edit'&&S){panel();draw()}}
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{if(b.dataset.v==='edit'&&!S)return note('أنشئ صفحة أولًا');show(b.dataset.v)});
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{$('pv').style.width=b.dataset.d==='100%'?'100%':b.dataset.d+'px';document.querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('on',x===b))});
+$('pv').style.width='375px';
+$('un').onclick=()=>{if(hi>0){hi--;S=JSON.parse(hist[hi]);panel();draw();save()}};$('re').onclick=()=>{if(hi<hist.length-1){hi++;S=JSON.parse(hist[hi]);panel();draw();save()}};
+
+/* ===== images ===== */
+const imgs=[];
+$('img').onchange=async e=>{imgs.length=0;$('th').innerHTML='';blob0=null;for(const f of [...e.target.files].slice(0,4)){const bm=await createImageBitmap(f),k=Math.min(1,640/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=bm.width*k;c.height=bm.height*k;c.getContext('2d').drawImage(bm,0,0,c.width,c.height);const u=c.toDataURL('image/jpeg',.7);imgs.push(u);if(!blob0)blob0=await new Promise(r=>c.toBlob(r,'image/jpeg',.7));$('th').insertAdjacentHTML('beforeend',`<img src="${u}">`)}};
+
+/* ===== generation ===== */
+const V=id=>$(id).value.trim();
+function fallback(s){const f=(s.features||'').split('\n').filter(Boolean),isf=s.lang==='fr',ise=s.lang==='en';return{headline:s.name,sub:s.desc||(isf?'Commandez maintenant':ise?'Order yours today':'اكتشف '+s.name+' واطلبه اليوم'),problem:s.problems||'',solution:s.desc||'',feats:(f.length?f:[s.name]).slice(0,6).map(x=>({t:x,d:''})),why:[s.warranty,s.delivery].filter(Boolean),faq:[{q:isf?'Comment commander ?':ise?'How do I order?':'كيف أطلب؟',a:isf?'Remplissez le formulaire.':ise?'Fill in the form below.':'املأ نموذج الطلب وسنتصل بك للتأكيد.'}],cta:isf?'Commander':ise?'Order now':'اطلب الآن',tpl:'modern'}}
+$('gen').onclick=async()=>{
+const s={id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:V('name'),price:V('price'),old:V('old'),brand:V('brand'),cur:V('cur'),wa:V('wa'),c1:V('c1'),c2:V('c2'),lang:V('lang'),desc:V('desc'),features:V('features'),problems:V('problems'),audience:V('audience'),warranty:V('warranty'),delivery:V('delivery'),options:V('options'),reviews:V('reviews'),tpl:V('tpl'),imgs:imgs.slice(),status:'draft',created:Date.now(),hidden:[],order:['hero','problem','features','gallery','why','reviews','faq','order','cta']};
+if(!s.name||!(+s.price>0))return note('أدخل اسم المنتج والسعر');
+const b=$('gen');b.disabled=true;b.textContent='⏳ جارٍ إنشاء الصفحة…';
+let c=null;
+if(sample){try{const o={};try{if((await sample.limits()).images&&blob0)o.images=[blob0]}catch{}
+const LG={ar:'العربية الفصحى',dz:'العربية بلهجة جزائرية مبسطة',fr:'الفرنسية',en:'الإنجليزية'}[s.lang];
+c=await sample.json(`أنت كاتب إعلانات لتاجر إلكتروني. اكتب نصوص صفحة هبوط بـ${LG}. استخدم فقط المعلومات المعطاة${o.images?' وما يظهر فعلًا في الصورة':''}؛ لا تخترع مواصفات أو ضمانات أو أرقامًا أو آراء عملاء. أعد JSON فقط بهذا الشكل: {"headline":"","sub":"","problem":"","solution":"","feats":[{"t":"","d":""}],"why":[""],"faq":[{"q":"","a":""}],"cta":"","tpl":"lux|modern|soft|sport|direct|local"} مع 4-6 مميزات و3 نقاط في why و4 أسئلة شائعة (إن احتاج جواب تأكيدًا من التاجر فاكتب «يرجى التواصل معنا للتأكيد»). اختر tpl المناسب لنوع المنتج.\nبيانات المنتج: ${JSON.stringify({name:s.name,price:s.price,old:s.old,cur:s.cur,brand:s.brand,desc:s.desc,features:s.features,problems:s.problems,audience:s.audience,warranty:s.warranty,delivery:s.delivery})}`,o)}catch(e){note('تعذّر استخدام الذكاء الاصطناعي ('+(e.code||'خطأ')+') — تم استخدام نص أساسي قابل للتعديل')}}
+else note('خدمة الذكاء الاصطناعي غير متاحة هنا — تم استخدام نص أساسي قابل للتعديل');
+s.copy=Object.assign(fallback(s),c||{});if(!s.tpl)s.tpl=TPL[s.copy.tpl]?s.copy.tpl:'modern';
+S=s;hist=[];hi=-1;snap(true);b.disabled=false;b.textContent='✨ أنشئ صفحة الهبوط الخاصة بي';show('edit')};
+
+/* ===== editor panel ===== */
+function panel(){const sh=S.status==='published';
+$('panel').innerHTML=`<h2>تخصيص الصفحة</h2><div class=mu>انقر على أي نص في المعاينة لتعديله مباشرة.</div><br>
+<label>القالب</label><select data-s="tpl">${Object.keys(TPL).map(k=>`<option value=${k} ${S.tpl===k?'selected':''}>${TPL[k].n}</option>`).join('')}</select>
+<div class=g style="grid-template-columns:1fr 1fr;margin-top:8px"><div><label>الأساسي</label><input type=color data-s="c1" value="${S.c1}"></div><div><label>الثانوي</label><input type=color data-s="c2" value="${S.c2}"></div></div>
+<label style="margin-top:8px">نص زر الطلب</label><input data-s="copy.cta" value="${esc(S.copy.cta)}">
+<div class=row style="margin-top:8px"><button class=b data-r="headline">✨ عنوان جديد</button><button class=b data-r="sub">✨ وصف جديد</button></div>
+<h2 style="margin-top:14px">الأقسام</h2>${S.order.map((k,i)=>`<div class=row><span>${SEC[k]}</span><button class=b data-m="${i},-1">↑</button><button class=b data-m="${i},1">↓</button><button class=b data-h="${k}">${S.hidden.includes(k)?'🚫':'👁'}</button></div>`).join('')}
+<h2 style="margin-top:14px">النشر</h2><div class=row><span class="tag ${sh?'pub':''}">${sh?'منشورة':'مسودة'}</span></div>
+<div class=row><button class="b p" id="pb">${sh?'إعادة النشر':'نشر'}</button><button class=b id="ex">⬇ تصدير HTML</button></div>
+<div class=row><button class=b id="lk">🔗 نسخ الرابط</button><button class=b id="cp">⧉ نسخة</button></div>`;
+$('panel').querySelectorAll('[data-s]').forEach(i=>i.oninput=()=>{sp(S,i.dataset.s,i.value);snap();draw()});
+$('panel').querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const[i,d]=b.dataset.m.split(',').map(Number),j=i+d;if(j<0||j>=S.order.length)return;[S.order[i],S.order[j]]=[S.order[j],S.order[i]];snap(true);panel();draw()});
+$('panel').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{const k=b.dataset.h,x=S.hidden.indexOf(k);x<0?S.hidden.push(k):S.hidden.splice(x,1);snap(true);panel();draw()});
+$('panel').querySelectorAll('[data-r]').forEach(b=>b.onclick=async()=>{if(!sample)return note('الذكاء الاصطناعي غير متاح');const k=b.dataset.r;b.disabled=true;try{const r=await sample(`اكتب بديلًا تسويقيًا مختلفًا ومقنعًا (${k==='sub'?'وصف قصير':'عنوان قصير'}) لمنتج "${S.name}" بنفس لغة النص التالي، بدون اختراع معلومات. أعد النص فقط.\nالنص الحالي: ${S.copy[k]}\nمعلومات: ${S.desc||''} ${S.features||''}`);S.copy[k]=r.text.trim().replace(/^["«]|["»]$/g,'');snap(true);draw()}catch(e){note('تعذّرت إعادة التوليد')}b.disabled=false});
+$('pb').onclick=async()=>{if(!db)return note('النشر يتطلب تسجيل الدخول وتفعيل قاعدة البيانات');S.status='published';S.updated=Date.now();try{await db.doc('pages/'+S.id).set(JSON.parse(JSON.stringify(S)));hist[hi]=JSON.stringify(S);panel();note('تم النشر. الرابط يعمل لمن لديه صلاحية فتح هذا التطبيق (ارجع إلى «نسخ الرابط»).')}catch(e){S.status='draft';note('فشل النشر: '+(e.message||e.code))}};
+$('lk').onclick=async()=>{const u=location.href.split('#')[0]+'#p='+S.id;try{await navigator.clipboard.writeText(u);note('تم نسخ الرابط (يعمل بعد النشر)')}catch{prompt('الرابط',u)}};
+$('ex').onclick=async()=>{if(!dl)return note('التصدير غير متاح هنا');try{await dl.save({filename:'landing-'+S.id+'.html',data:L(S,false,true)})}catch(e){note('لم يتم الحفظ')}};
+$('cp').onclick=()=>{S=JSON.parse(JSON.stringify(S));S.id='p'+Date.now().toString(36);S.status='draft';S.name+=' (نسخة)';S.created=Date.now();hist=[];hi=-1;snap(true);panel();draw();note('تم إنشاء نسخة جديدة')}}
+
+addEventListener('message',async e=>{const m=e.data;if(!m)return;
+if(m.t==='ed'&&S&&e.source===$('pv').contentWindow){const k=m.k==='brand'?'brand':m.k;sp(S,k,m.v);snap()}
+if(m.t==='order'){const w=e.source,vis=window.__vis;if(!db)return w.postMessage({t:'res',ok:false,msg:'الخدمة غير متاحة'},'*');
+try{const d=m.d,id='o'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);await db.doc('orders/'+id).set({name:String(d.name).slice(0,100),phone:String(d.phone).slice(0,20),wilaya:String(d.wilaya).slice(0,60),commune:String(d.commune||'').slice(0,200),option:String(d.option||''),qty:+d.qty||1,pageId:vis?vis.id:S.id,pageName:vis?vis.name:S.name,status:'new',created:Date.now()});w.postMessage({t:'res',ok:true},'*')}catch(x){w.postMessage({t:'res',ok:false,msg:'تعذّر إرسال الطلب'},'*')}}});
+
+/* ===== dashboard & orders ===== */
+const fd=t=>new Date(t).toLocaleString('ar-DZ',{dateStyle:'short',timeStyle:'short'});
+function lists(){
+db.collection('pages').orderBy('updated','desc').onSnapshot(q=>{const el=$('pg');el.innerHTML=q.empty?'<div class=card>لا توجد صفحات بعد.</div>':'';q.docs.forEach(d=>{const p=d.data(),c=document.createElement('div');c.className='card';c.innerHTML=`${p.imgs&&p.imgs[0]?`<img src="${p.imgs[0]}" style="width:100%;height:140px;object-fit:cover;border-radius:10px">`:''}<h2>${esc(p.name)}</h2><div class=mu>${esc(p.price)} ${esc(p.cur)} · <span class="tag ${p.status==='published'?'pub':''}">${p.status==='published'?'منشورة':'مسودة'}</span><br>أُنشئت ${fd(p.created)} · عُدّلت ${fd(p.updated)}</div><div class=row style="margin-top:8px"><button class=b data-a=e>تعديل</button><button class=b data-a=c>نسخ</button><button class=b data-a=d>حذف</button></div>`;
+c.querySelector('[data-a=e]').onclick=()=>{S=p;hist=[];hi=-1;hist.push(JSON.stringify(S));hi=0;show('edit')};
+c.querySelector('[data-a=c]').onclick=async()=>{const n=JSON.parse(JSON.stringify(p));n.id='p'+Date.now().toString(36);n.name+=' (نسخة)';n.status='draft';n.created=n.updated=Date.now();await db.doc('pages/'+n.id).set(n)};
+c.querySelector('[data-a=d]').onclick=async()=>{if(confirm('حذف الصفحة نهائيًا؟'))await db.doc('pages/'+p.id).delete()};el.appendChild(c)})},e=>note('تعذّر تحميل الصفحات'));
+db.collection('orders').orderBy('created','desc').onSnapshot(q=>{const el=$('od');el.innerHTML=q.empty?'<div class=card>لا توجد طلبات بعد.</div>':'';
+const ST={new:'جديد',confirmed:'مؤكد',shipped:'تم الشحن',done:'مُسلَّم',cancel:'ملغى'};
+q.docs.forEach(d=>{const o=d.data(),c=document.createElement('div');c.className='card';c.innerHTML=`<div class=row><b>${esc(o.name)}</b><span class=mu>${esc(o.phone)} · ${esc(o.wilaya)} ${esc(o.commune)}</span><select style="width:130px">${Object.keys(ST).map(k=>`<option value=${k} ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></div><div class=mu>${esc(o.pageName)} · الكمية ${o.qty}${o.option?' · '+esc(o.option):''} · ${fd(o.created)}</div>`;
+c.querySelector('select').onchange=ev=>db.doc('orders/'+d.id).update({status:ev.target.value});el.appendChild(c)})},()=>{$('od').innerHTML='<div class=card>عرض الطلبات متاح لمالك التطبيق فقط.</div>'})}
+
+/* ===== boot ===== */
+(async()=>{sample=await U('sample');db=await U('db');dl=await U('downloads');
+const m=location.hash.match(/^#p=(\w+)/);
+if(m){document.body.innerHTML='<iframe id=pv sandbox="allow-scripts allow-forms" style="position:fixed;inset:0;width:100%;height:100%;border:0;border-radius:0"></iframe>';
+try{const d=await db.doc('pages/'+m[1]).get(),p=d.data();if(!d.exists||p.status!=='published')throw 0;window.__vis={id:p.id,name:p.name};document.getElementById('pv').srcdoc=L(p,false,false)}catch{document.body.insertAdjacentHTML('afterbegin','<p style="padding:30px;text-align:center">هذه الصفحة غير متاحة.</p>')}return}
+if(db)lists();else note('قاعدة البيانات غير متاحة (سجّل الدخول). يمكنك التجربة دون حفظ.');
+if(!sample)note('الذكاء الاصطناعي غير متاح في هذا العرض؛ سيُستخدم نص أساسي.')})();
+</script>
+</body>
+</html>
